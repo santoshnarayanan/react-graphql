@@ -1,5 +1,6 @@
-const express = require('express');
+const { createHandler } = require("graphql-http/lib/use/express");
+const express = require("express");
 const app = express();
-app.listen(4000, () => {
-    console.log('Server is running on port 4000');
-})
+app.use("/graphql", createHandler({ graphql: true, }));
+app.listen({ port: 4000 });
+console.log("Listening to port 4000");
