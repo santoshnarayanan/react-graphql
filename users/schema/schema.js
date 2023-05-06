@@ -4,6 +4,15 @@ const {
     GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema
 } = graphql;
 
+//define the company type above UserType
+const CompanyType = new GraphQLObjectType({
+    name: 'Company',
+    fields: {
+        id: { type: GraphQLString },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString }
+    }
+});
 
 //Define the user type
 const UserType = new GraphQLObjectType({
@@ -11,7 +20,10 @@ const UserType = new GraphQLObjectType({
     fields: {
         id: { type: GraphQLString },
         firstName: { type: GraphQLString },
-        age: { type: GraphQLInt }
+        age: { type: GraphQLInt },
+        company: {
+            type: CompanyType
+        }
     }
 });
 
