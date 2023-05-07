@@ -32,7 +32,7 @@ const UserType = new GraphQLObjectType({
     }
 });
 
-//Define the root query
+//Multiple Query Entry points - so we can query on  user or company
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -42,6 +42,13 @@ const RootQuery = new GraphQLObjectType({
             resolve(parentValue, args) {
                 //fetch actual data from the json-server hosted on localhost:3000
                 return axios.get(`http://localhost:3000/users/${args.id}`).then(res => res.data);
+            }
+        },
+        company: {
+            type: CompanyType,
+            args: { id: { type: GraphQLString } },
+            resolve(parentValue, args) {
+                return axios.get(`http://localhost:3000/companies/${args.id}`).then(res => res.data);
             }
         }
     }
