@@ -9,7 +9,7 @@ const {
 //get list of users associated to a particular company
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
-    fields: {
+    fields: () => ({
         id: { type: GraphQLString },
         name: { type: GraphQLString },
         description: { type: GraphQLString },
@@ -17,16 +17,16 @@ const CompanyType = new GraphQLObjectType({
             type: new GraphQLList(UserType),
             resolve(parentValue, args) {
                 return axios.get(`http://localhost:3000/companies/${parentValue.id}/users`)
-                    .then(res => res.data);
+                    .then(res => res.data)
             }
         }
-    }
+    })
 });
 
 //Define the user type
 const UserType = new GraphQLObjectType({
     name: 'User',
-    fields: {
+    fields: () => ({
         id: { type: GraphQLString },
         firstName: { type: GraphQLString },
         age: { type: GraphQLInt },
@@ -38,7 +38,7 @@ const UserType = new GraphQLObjectType({
                     .then(res => res.data);
             }
         }
-    }
+    })
 });
 
 //Multiple Query Entry points - so we can query on  user or company
