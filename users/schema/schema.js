@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const axios = require('axios');
 const {
-    GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList
+    GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull
 } = graphql;
 
 //Bi-Directional GraphQL
@@ -70,12 +70,13 @@ const mutation = new GraphQLObjectType({
         addUser: {
             type: UserType,
             args: {
-                firstName: { type: GraphQLString },
-                age: { type: GraphQLInt },
+                firstName: { type: new GraphQLNonNull(GraphQLString) },
+                age: { type: new GraphQLNonNull(GraphQLInt) },
                 companyId: { type: GraphQLString }
             },
-            resolve() {
-
+            resolve(parentValue, { firstName, age }) {
+                return axios.post('http://localhost:3000/users', { firstName, age })
+                    .then(res => res.data);
             }
         }
     }
@@ -83,5 +84,6 @@ const mutation = new GraphQLObjectType({
 
 //make it available to other
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: mutation
 });
